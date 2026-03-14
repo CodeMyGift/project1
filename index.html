@@ -20,7 +20,7 @@ body, html {
   padding:0;
   font-family:'Cairo', sans-serif;
   background:var(--pink);
-  height: 100%; /* التعديل الجديد */
+  height: 100%; 
   width: 100%;
   overflow:hidden;
   transition: background 0.5s;
@@ -128,11 +128,11 @@ body, html {
   margin-top:10px;
 }
 
-/* MAIN - التعديل السحري هنا (Flexbox) */
+/* MAIN - Flexbox Layout */
 #main-content{
-  display:none; /* بيتحول في الجافاسكريبت لـ flex */
+  display:none; 
   flex-direction: column;
-  height: 100dvh; /* بياخد طول الشاشة بالظبط */
+  height: 100dvh; 
   text-align:center;
   padding-top:20px;
   box-sizing: border-box;
@@ -175,6 +175,9 @@ body, html {
   font-family:'Cairo', sans-serif;
   cursor:pointer;
   transition: 0.3s;
+  /* إضافة خصائص إزالة المربع الأزرق لزراير التابات كمان */
+  -webkit-tap-highlight-color: transparent; 
+  outline: none;
 }
 
 .tab-btn.active{
@@ -186,8 +189,8 @@ body, html {
 .content-display{
   width: 90%;
   max-width: 600px;
-  flex: 1; /* الكود ده بيخليه يتمدد ياخد المساحة الفاضية بس! */
-  margin: 15px auto 25px auto; /* مسافة أمان من تحت */
+  flex: 1; 
+  margin: 15px auto 25px auto; 
   background: rgba(255,255,255,.9);
   border-radius: 20px;
   padding: 20px;
@@ -221,7 +224,7 @@ body, html {
 /* الصور */
 .photo-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* عمودين للموبايل دايمًا عشان الوضوح */
+  grid-template-columns: repeat(2, 1fr); 
   gap: 12px;
   padding-bottom: 20px;
 }
@@ -237,6 +240,7 @@ body, html {
   cursor: zoom-in;
   transition: transform 0.3s, box-shadow 0.3s;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  -webkit-tap-highlight-color: transparent;
 }
 .album-img:hover {
   transform: scale(1.05);
@@ -324,6 +328,8 @@ div:where(.swal2-container) {
   align-items: center;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   transition: 0.3s;
+  -webkit-tap-highlight-color: transparent; /* إزالة المربع الأزرق */
+  outline: none;
 }
 </style>
 </head>
@@ -400,8 +406,16 @@ div:where(.swal2-container) {
             display: inline-block;
             animation: heartBeat 1.5s infinite;
             user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent; /* السر هنا */
+            outline: none;
+            touch-action: manipulation; /* سرعة استجابة اللمس */
             transition: transform 0.1s;
-        " onmousedown="this.style.transform='scale(0.9)'" onmouseup="this.style.transform='scale(1)'">
+        " 
+        onmousedown="this.style.transform='scale(0.9)'" 
+        onmouseup="this.style.transform='scale(1)'"
+        ontouchstart="this.style.transform='scale(0.9)'" 
+        ontouchend="this.style.transform='scale(1)'">
             ❤️
         </div>
       </div>
@@ -431,13 +445,13 @@ div:where(.swal2-container) {
     <div id="music" class="section-content">
       <div style="margin-bottom:15px">
           <p style="font-weight: bold; text-align: right;">🎶 تراك 1 - أغنيتنا الأولى</p>
-          <audio controls style="width:100%">
+          <audio controls style="width:100%; outline:none;">
             <source src="song1.mp3">
           </audio>
       </div>
       <div>
           <p style="font-weight: bold; text-align: right;">🎶 تراك 2 - أغنية مميزة</p>
-          <audio controls style="width:100%">
+          <audio controls style="width:100%; outline:none;">
             <source src="song2.mp3">
           </audio>
       </div>
@@ -464,6 +478,7 @@ div:where(.swal2-container) {
         position: relative;
         overflow: hidden;
         color: white;
+        -webkit-tap-highlight-color: transparent;
       ">
         <div style="
             position: absolute; inset: 0;
@@ -477,6 +492,7 @@ div:where(.swal2-container) {
                 margin-bottom: 10px; 
                 animation: moonGlow 3s infinite alternate;
                 cursor: pointer;
+                -webkit-tap-highlight-color: transparent;
             ">🌕</div>
             <h3 style="
                 color: #fff;
@@ -550,7 +566,7 @@ function checkPassword(){
     // تشغيل الموسيقى
     const music = document.getElementById("bg-music");
     music.volume = 0.5;
-    music.play().catch(e => console.log("Audio play blocked"));
+    music.play().catch(e => console.log("Audio play blocked, needs interaction"));
 
     // تأثير الاحتفال 
     confetti({ 
@@ -570,7 +586,6 @@ function checkPassword(){
       setTimeout(()=>{
         greeting.style.display="none";
         
-        // التعديل السحري: بنخليه flex مش block عشان الشاشة تظبط
         main.style.display="flex"; 
         
         // إظهار زرار الموسيقى
@@ -617,7 +632,6 @@ document.querySelectorAll(".album-img").forEach(img=>{
   }
 });
 
-// إيقاف أي صوت شغال لما صوت تاني يشتغل
 document.addEventListener('play', function(e){
     var audios = document.getElementsByTagName('audio');
     for(var i = 0, len = audios.length; i < len;i++){
@@ -733,6 +747,9 @@ function showMissMsg() {
     });
 }
 
+// ==========================================
+// زرار تشغيل وإيقاف الموسيقى
+// ==========================================
 let isMusicPlaying = true;
 function toggleMusic() {
   const music = document.getElementById("bg-music");
