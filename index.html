@@ -20,7 +20,8 @@ body, html {
   padding:0;
   font-family:'Cairo', sans-serif;
   background:var(--pink);
-  height:100dvh; /* التعديل السحري عشان شريط المتصفح مياكلش حتة من الموقع */
+  height: 100%; /* التعديل الجديد */
+  width: 100%;
   overflow:hidden;
   transition: background 0.5s;
 }
@@ -127,12 +128,14 @@ body, html {
   margin-top:10px;
 }
 
-/* MAIN */
+/* MAIN - التعديل السحري هنا (Flexbox) */
 #main-content{
-  display:none;
-  height:100%;
+  display:none; /* بيتحول في الجافاسكريبت لـ flex */
+  flex-direction: column;
+  height: 100dvh; /* بياخد طول الشاشة بالظبط */
   text-align:center;
-  padding-top:25px;
+  padding-top:20px;
+  box-sizing: border-box;
   position:relative;
   z-index:2;
 }
@@ -142,26 +145,29 @@ body, html {
   font-weight: 700;
   font-size:2.5rem;
   color:var(--accent);
-  min-height:60px;
+  min-height:50px;
+  margin: 10px 0;
 }
 
 #days-together{
   font-family:'Cairo', sans-serif;
   font-size:1.3rem;
   color:var(--accent);
-  margin-top:10px;
+  margin-top:0px;
+  margin-bottom: 15px;
   font-weight: bold;
 }
 
 .tabs-container{
   display:flex;
-  gap:15px;
+  gap:10px;
   justify-content:center;
   flex-wrap:wrap;
+  padding: 0 10px;
 }
 
 .tab-btn{
-  padding:10px 20px;
+  padding:8px 15px;
   border:none;
   border-radius:50px;
   background:white;
@@ -176,24 +182,24 @@ body, html {
   color:white;
 }
 
-/* التعديل الجذري للبوكس الأبيض عشان السكرول */
+/* البوكس الأبيض اللي جواه المحتوى */
 .content-display{
-  width:85%;
-  max-width:600px;
-  height:65dvh; 
-  margin:20px auto;
-  background:rgba(255,255,255,.9);
-  border-radius:20px;
-  padding:20px;
-  box-sizing: border-box; 
-  overflow-y:auto;
+  width: 90%;
+  max-width: 600px;
+  flex: 1; /* الكود ده بيخليه يتمدد ياخد المساحة الفاضية بس! */
+  margin: 15px auto 25px auto; /* مسافة أمان من تحت */
+  background: rgba(255,255,255,.9);
+  border-radius: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch; 
   position: relative;
   z-index: 5;
 }
 
 /* SCROLLBAR */
-.content-display::-webkit-scrollbar { width: 8px; }
+.content-display::-webkit-scrollbar { width: 6px; }
 .content-display::-webkit-scrollbar-track { background: #fff0f5; border-radius: 10px; }
 .content-display::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 
@@ -203,24 +209,29 @@ body, html {
 /* LETTER TEXT */
 .letter-text {
   text-align: right;
-  padding: 0 10px;
+  padding: 0 5px;
 }
 .letter-text p {
   font-size: 1.1rem;
   line-height: 1.8;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   color: #444;
 }
 
-/* تعديل عرض الصور بدون قص */
+/* الصور */
 .photo-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
+  grid-template-columns: repeat(2, 1fr); /* عمودين للموبايل دايمًا عشان الوضوح */
+  gap: 12px;
+  padding-bottom: 20px;
 }
+@media(min-width: 600px){
+    .photo-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
 .album-img {
   width: 100%;
-  height: auto; /* بيعرض الصورة بالكامل */
+  height: auto; 
   display: block;
   border-radius: 10px;
   cursor: zoom-in;
@@ -291,25 +302,28 @@ body, html {
 /* NIGHT MODE */
 @keyframes twinkle{ 0%,100%{opacity:0.5;} 50%{opacity:1;} }
 
-/* MEDIA QUERIES للموبايل */
-@media(max-width:820px){
-  .welcome-text{font-size:2rem}
-  
-  .content-display{
-      height: 65dvh; 
-      width: 90%;
-      padding: 15px;
-  }
-  
-  .photo-grid {
-    grid-template-columns: repeat(2, 1fr); /* عمودين للموبايل */
-    gap: 10px;
-  }
-}
-
 /* SweetAlert Font Adjust */
 div:where(.swal2-container) {
     font-family: 'Cairo', sans-serif !important;
+}
+
+/* زراير التحكم */
+.control-btn {
+  position:fixed;
+  top:15px;
+  width: 40px;
+  height: 40px;
+  background:rgba(255,255,255,0.9);
+  border:2px solid var(--accent);
+  border-radius:50%;
+  cursor:pointer;
+  z-index:10000;
+  font-size: 1.1rem;
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: 0.3s;
 }
 </style>
 </head>
@@ -373,12 +387,12 @@ div:where(.swal2-container) {
           <p>استمتعي باليوم الجميل ده، ده كله عشانك. ولسه اللي جاي أحلى وأحلى! 🫀🌹</p>
       </div>
 
-      <div style="margin-top:30px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+      <div style="margin-top:20px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
         <button onclick="showFearMsg()" class="tab-btn" style="background:#ff8fa3; color:white;">دوسي هنا لو زعلانة 🥺</button>
         <button onclick="showMissMsg()" class="tab-btn" style="background:#ff8fa3; color:white;">دوسي هنا لو وحشتك 🫂</button>
       </div>
 
-      <div style="text-align: center; margin-top: 40px; position: relative; z-index: 100;">
+      <div style="text-align: center; margin-top: 30px; padding-bottom: 30px; position: relative; z-index: 100;">
         <p style="color: var(--accent); font-weight: bold; margin-bottom: 10px;">دوسي على القلب 👇</p>
         <div onclick="explodeBears()" style="
             font-size: 4rem; 
@@ -391,7 +405,6 @@ div:where(.swal2-container) {
             ❤️
         </div>
       </div>
-      <div style="height: 60px; width: 100%;"></div>
       
       <style>
         @keyframes heartBeat {
@@ -413,7 +426,6 @@ div:where(.swal2-container) {
         <img src="photo5.jpg" class="album-img" alt="Memory 5">
         <img src="photo6.jpg" class="album-img" alt="Memory 6">
       </div>
-      <div style="height: 60px; width: 100%;"></div>
     </div>
 
     <div id="music" class="section-content">
@@ -444,7 +456,8 @@ div:where(.swal2-container) {
         background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
         padding: 25px;
         border-radius: 20px;
-        margin-top: 30px;
+        margin-top: 20px;
+        margin-bottom: 20px;
         text-align: center;
         box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
         border: 1px solid #7aa1d2;
@@ -493,7 +506,6 @@ div:where(.swal2-container) {
             ">خليكي دايماً مبتسمة 😉🌕</div>
         </div>
       </div>
-      <div style="height: 60px; width: 100%;"></div>
       
       <style>
         @keyframes moonGlow {
@@ -509,43 +521,9 @@ div:where(.swal2-container) {
   <img id="modal-img">
 </div>
 
-<button id="toggle-music-btn" onclick="toggleMusic()" style="
-  position:fixed;
-  top:20px;
-  right:20px; 
-  width: 45px;
-  height: 45px;
-  background:rgba(255,255,255,0.9);
-  border:2px solid var(--accent);
-  border-radius:50%;
-  cursor:pointer;
-  z-index:10000;
-  font-size: 1.2rem;
-  display: none; 
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  transition: 0.3s;
-">🔊</button>
+<button id="toggle-music-btn" class="control-btn" onclick="toggleMusic()" style="right:15px; display: none;">🔊</button>
 
-<button id="toggle-night" style="
-  position:fixed;
-  top:20px;
-  left:20px; 
-  width: 45px;
-  height: 45px;
-  background:rgba(255,255,255,0.9);
-  border:2px solid var(--accent);
-  border-radius:50%;
-  cursor:pointer;
-  z-index:10000;
-  font-size: 1.2rem;
-  display: flex; 
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  transition: 0.3s;
-">🌙</button>
+<button id="toggle-night" class="control-btn" style="left:15px;">🌙</button>
 
 <script>
 // ==========================================
@@ -572,7 +550,7 @@ function checkPassword(){
     // تشغيل الموسيقى
     const music = document.getElementById("bg-music");
     music.volume = 0.5;
-    music.play().catch(e => console.log("Audio play blocked, needs interaction"));
+    music.play().catch(e => console.log("Audio play blocked"));
 
     // تأثير الاحتفال 
     confetti({ 
@@ -591,7 +569,9 @@ function checkPassword(){
 
       setTimeout(()=>{
         greeting.style.display="none";
-        main.style.display="block";
+        
+        // التعديل السحري: بنخليه flex مش block عشان الشاشة تظبط
+        main.style.display="flex"; 
         
         // إظهار زرار الموسيقى
         document.getElementById("toggle-music-btn").style.display = "flex";
@@ -637,6 +617,7 @@ document.querySelectorAll(".album-img").forEach(img=>{
   }
 });
 
+// إيقاف أي صوت شغال لما صوت تاني يشتغل
 document.addEventListener('play', function(e){
     var audios = document.getElementsByTagName('audio');
     for(var i = 0, len = audios.length; i < len;i++){
@@ -650,18 +631,11 @@ function updateDaysTogether(){
   const startDate = new Date(CONFIG.startDate);
   const now = new Date();
   
-  if (isNaN(startDate)) {
-      document.getElementById("days-together").textContent = "تاريخ غير صحيح في الإعدادات.";
-      return;
-  }
+  if (isNaN(startDate)) return;
 
   let diff = Math.floor((now - startDate) / 1000);
   let prefix = "مع بعض بقالنا: ";
-  
-  if (diff < 0) {
-      diff = Math.abs(diff);
-      prefix = "فاضل: ";
-  }
+  if (diff < 0) { diff = Math.abs(diff); prefix = "فاضل: "; }
 
   const days = Math.floor(diff / (3600*24));
   diff -= days * 3600 * 24;
@@ -693,7 +667,7 @@ toggleBtn.onclick = () => {
       el.textContent = "✨💗";
       el.style.animation = `floatUp ${Math.random()*8+8}s linear infinite, twinkle ${Math.random()*2+1}s ease-in-out infinite`;
     });
-    toggleBtn.textContent = "☀️"; // الأيقونة فقط
+    toggleBtn.textContent = "☀️"; 
   }else{
     document.body.style.background = "var(--pink)";
     if(loginOverlay) loginOverlay.style.background = "var(--pink)";
@@ -704,7 +678,7 @@ toggleBtn.onclick = () => {
       el.textContent = icons[i%icons.length];
       el.style.animation = `floatUp ${[10,14,9,12,15,11,13,10,14][i]}s linear infinite`;
     });
-    toggleBtn.textContent = "🌙"; // الأيقونة فقط
+    toggleBtn.textContent = "🌙"; 
   }
 };
 
@@ -759,9 +733,6 @@ function showMissMsg() {
     });
 }
 
-// ==========================================
-// زرار تشغيل وإيقاف الموسيقى
-// ==========================================
 let isMusicPlaying = true;
 function toggleMusic() {
   const music = document.getElementById("bg-music");
